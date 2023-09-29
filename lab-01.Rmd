@@ -37,7 +37,7 @@ _Create a frequency table of the number of tourist attractions in the data set b
 ```{r Ex_a}
 # Delete the comment '#' symbol at the start of the next line and complete the code. 
 
-#visitors %>% count(_____)
+visitors %>% count(region)
 ```
 
 ### Exercise b.
@@ -47,7 +47,7 @@ _Create a frequency table by `admission` and `setting`._
 ```{r Ex_b}
 # Delete the comment '#' symbol at the start of the next line and complete the code.
 
-#visitors %>% count(_____, _____)
+visitors %>% count(admission, setting)
 ```
 
 
@@ -77,14 +77,16 @@ visitors %>% arrange(desc(n_2022))
 
 _What are the top 10 most visited attractions in 2021?_
 ```{r Ex_c}
-#visitors %>% 
-#  arrange(____(____)) %>%
-#  head(n = ____)
+visitors %>% 
+  arrange(desc(n_2021)) %>%
+  head(n = 10)
 ```
 
 ## Question 4
 
 _What is the admission charge for the `"National Museum of Scotland"`?_
+
+<!-- q4) free -->cc
 
 ```{r Q4}
 visitors %>% filter(attraction == "National Museum of Scotland")
@@ -95,18 +97,22 @@ visitors %>% filter(attraction == "National Museum of Scotland")
 
 _Which attraction had exactly 565,772 visitors in 2022?_
 
+<!-- q4)d) None -->
+
 ```{r Ex_d}
-#visitors %>% filter(___ == ____)
+visitors %>% filter(n_2022 == 565722)
 ```
 
 ### Exercise e.
 
 _How many attraction had more than 1 million visitors in 2022?_
 
+<!-- q4)e) 22 attractions -->
+
 ```{r Ex_e}
-#visitors %>% 
-#  filter(____) %>%
-#  count()
+visitors %>% 
+  filter(n_2022>1000000) %>%
+  count()
 ```
 
 ## Question 5
@@ -128,22 +134,24 @@ visitors %>%
 
 _How many attractions had between 50,000 and 100,000 visitors in 2022?_
 
+<!-- q5)f) 50  -->
+
 ```{r Ex_f}
-#visitors %>% 
-#  ____(
-#    ______,
-#    ______ ) %>%
-#  count()
+visitors %>% 
+  filter(n_2022>50000
+  ,n_2022< 100000) %>%
+  count()
 ```
 
 ### Exercise g.
 
 _How many regions have more than 50 tourist attraction in the data set? (Hint: You will need to tabulate the data before filtering.)_
 
+<!-- answer: 1 region, i.e. Scotland -->
 ```{r Ex_g}
-#visitors %>% 
-#  _____(region) %>%
-#  filter(______)
+visitors %>% 
+  count(region) %>%
+  filter(n>50)
 ```
 
 
@@ -168,11 +176,11 @@ visitors %>%
 _Perform the same calculation for the 2021 admissions data._
 
 ```{r Ex_h}
-#visitors %>% 
-#  ______(
-#    __________,
-#    __________
-#  )
+visitors %>% 
+  summarise(
+    mean_2021 = mean(n_2021, na.rm = TRUE),
+    med_2021 = mean(n_2021, na.rm = TRUE)
+  )
 ```
 
 All values in the output are `NA`!
@@ -183,7 +191,7 @@ _What does `NA` stand for and why are you getting this as your answer to the pre
 
 **Write your answer here**
 
-
+NA means "Not Available", there may have been some attractions that were not avaiable in 2021. 
 
 
 ### Exercise j.
@@ -192,12 +200,14 @@ _Look at the help pages for the `mean()` and `median()` commands to see what the
 
 **Write your answer here**
 
-
+na.rm is a condition that allows NA values to not be taken into account, e.g. 'na.rm = TRUE' will allow the mean to be calculated without NA values being taken into account.
 
 
 ## Question 7
 
 _Which setting (inside, outside or mixed) has the largest mean visitor numbers in 2022?_
+
+<!-- (I)ndoors -->
 
 ```{r Q7}
 visitors %>% 
@@ -213,7 +223,7 @@ visitors %>%
 _Observe in question 6 that the mean statistics across all settings are much larger than the corresponding median statistics. Discuss in your group what this suggests about the data._
 
 **Write your answer here**
-
+The data is positively skewed, where the mean value is higher than the median value. This suggests the data is not symmetrical where the mean value is the same as the median.
 
 
 
@@ -245,8 +255,8 @@ _How many tourist attractions are there in each of the 4 nations? From this, dis
 
 
 ```{r Ex_l}
-#________ %>%
-#  ______(_______)
+ visitors_with_nations %>%
+  count(nation)
 ```
 
 
@@ -258,8 +268,9 @@ _How many tourist attractions are there in each of the 4 nations? From this, dis
 _Within each of the 4 nations, what is the proportion of tourist attractions that have free admission for all visitors?_
 
 ```{r Ex_m}
-# Write your code here
-
+visitors_with_nations %>%
+  filter(admission=="Free") %>%
+  group_by(nation)
 
 ```
 
